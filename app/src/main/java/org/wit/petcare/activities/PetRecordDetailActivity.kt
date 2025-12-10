@@ -1,15 +1,21 @@
 package org.wit.petcare.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import org.wit.petcare.R
 import org.wit.petcare.databinding.ActivityPetRecordDetailBinding
+import org.wit.petcare.helpers.showImagePicker
 import org.wit.petcare.main.MainApp
 import org.wit.petcare.models.PetCareModel
+import timber.log.Timber.i
 
 class PetRecordDetailActivity : AppCompatActivity() {
 
@@ -17,11 +23,15 @@ class PetRecordDetailActivity : AppCompatActivity() {
     private lateinit var app: MainApp
     private lateinit var petRecord: PetCareModel
 
+    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPetRecordDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         app = application as MainApp
+        registerImagePickerCallback()
 
         setSupportActionBar(binding.toolbarDetail)
         supportActionBar?.title = "Pet Details"
@@ -45,6 +55,11 @@ class PetRecordDetailActivity : AppCompatActivity() {
             binding.hourPicker.value = pet.feedingHour
             binding.minutePicker.value = pet.feedingMinute
             binding.timePicker.value = if (pet.timePicker == "PM") 1 else 0
+            if (pet.imageUri.isNotEmpty()) {
+                Picasso.get()
+                    .load(pet.imageUri)
+                    .into(binding.placemarkImage)
+            }
         }
 
 
@@ -58,12 +73,32 @@ class PetRecordDetailActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
         }
+
+        binding.chooseImage.setOnClickListener {
+            showImagePicker(this, imageIntentLauncher)
+        }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_pet_detail, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
+    private fun registerImagePickerCallback() {
+        imageIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK && result.data != null) {
+                    val uri = result.data!!.data!!
+                    petRecord.imageUri = uri.toString()
+                    Picasso.get()
+                        .load(uri)
+                        .into(binding.placemarkImage)
+                }
+            }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

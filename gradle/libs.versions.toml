@@ -14,6 +14,7 @@ kotlinPlugin = "2.2.20"
 picasso = "2.71828"
 serialization = "1.9.0"
 
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
