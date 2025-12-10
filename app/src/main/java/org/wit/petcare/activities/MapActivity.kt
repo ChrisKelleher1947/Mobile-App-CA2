@@ -72,7 +72,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
         map.setOnMarkerDragListener(this)
     }
 
-    override fun onMarkerDrag(p0: Marker) {}
+    override fun onMarkerDrag(marker: Marker) {
+        marker.snippet = "Lat: ${marker.position.latitude}, Lng: ${marker.position.longitude}"
+        marker.showInfoWindow() // update popup immediately
+    }
 
     override fun onMarkerDragEnd(marker: Marker) {
         locationLat = marker.position.latitude
