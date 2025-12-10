@@ -49,13 +49,20 @@ class PetCareActivity : AppCompatActivity() {
         }
 
         //Save button
+        //Save button
         binding.btnAddPet.setOnClickListener {
             val name = binding.petName.text.toString().trim()
             val type = binding.petType.text.toString().trim()
             val birthday = binding.tvSelectedDate.text.toString().replace("Selected Date: ", "").trim()
 
-            // Check all fields
-            if (name.isNotEmpty() && type.isNotEmpty() && birthday.isNotEmpty() && birthday != "No date selected") {
+            val missingFields = mutableListOf<String>()
+
+            if (name.isEmpty()) missingFields.add("name")
+            if (type.isEmpty()) missingFields.add("type")
+            if (birthday.isEmpty() || birthday == "No date selected") missingFields.add("birthday")
+            if (petRecord.lat == 0.0 && petRecord.lng == 0.0) missingFields.add("location") // require location
+
+            if (missingFields.isEmpty()) {
                 petRecord.petName = name
                 petRecord.petType = type
                 petRecord.petBirthday = birthday
@@ -66,21 +73,20 @@ class PetCareActivity : AppCompatActivity() {
                 setResult(RESULT_OK)
                 finish()
             } else {
-                val missingFields = mutableListOf<String>()
-                if (name.isEmpty()) missingFields.add("name")
-                if (type.isEmpty()) missingFields.add("type")
-                if (birthday.isEmpty() || birthday == "No date selected") missingFields.add("birthday")
-
                 val message = "Please enter: ${missingFields.joinToString(", ")}"
                 Snackbar.make(it, message, Snackbar.LENGTH_LONG).show()
             }
         }
 
-        binding.placemarkLocation.setOnClickListener {
-            i("Set Location Pressed")
-            val launcherIntent = Intent(this, MapActivity::class.java)
-            mapIntentLauncher.launch(launcherIntent)
+
+        binding.chooseLocation.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("lat", petRecord.lat)
+            intent.putExtra("lng", petRecord.lng)
+            intent.putExtra("zoom", petRecord.zoom)
+            mapIntentLauncher.launch(intent)
         }
+
 
     }
 
@@ -118,7 +124,14 @@ class PetCareActivity : AppCompatActivity() {
 
     private fun registerMapCallback() {
         mapIntentLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { i("Map Loaded") }
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK && result.data != null) {
+                    val data = result.data!!
+                    petRecord.lat = data.getDoubleExtra("lat", petRecord.lat)
+                    petRecord.lng = data.getDoubleExtra("lng", petRecord.lng)
+                    petRecord.zoom = data.getFloatExtra("zoom", petRecord.zoom)
+                }
+            }
     }
+
 }

@@ -1,48 +1,84 @@
 package org.wit.petcare.activities
 
-import android.os.Bundle
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.activity.addCallback
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.petcare.R
 import org.wit.petcare.databinding.ActivityMapBinding
+import org.wit.petcare.models.PetCareModel
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener {
 
-    private lateinit var mMap: GoogleMap
+    private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapBinding
+    private var locationLat = 52.245696
+    private var locationLng = -7.139102
+    private var locationZoom = 15f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // Get location from intent if passed
+        intent.extras?.let {
+            locationLat = it.getDouble("lat", locationLat)
+            locationLng = it.getDouble("lng", locationLng)
+            locationZoom = it.getFloat("zoom", locationZoom)
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+            val resultIntent = Intent()
+            resultIntent.putExtra("lat", locationLat)
+            resultIntent.putExtra("lng", locationLng)
+            resultIntent.putExtra("zoom", locationZoom)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        }
+        binding.btnSaveLocation.setOnClickListener {
+            val resultIntent = Intent()
+            resultIntent.putExtra("lat", locationLat)
+            resultIntent.putExtra("lng", locationLng)
+            resultIntent.putExtra("zoom", locationZoom)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish() // close map and return to PetCareActivity
+        }
+
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        map = googleMap
+        val loc = LatLng(locationLat, locationLng)
+        val options = MarkerOptions()
+            .position(loc)
+            .title("Pet Home")
+            .snippet("GPS: $loc")
+            .draggable(true)
+        map.addMarker(options)
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, locationZoom))
+        map.setOnMarkerDragListener(this)
     }
+
+    override fun onMarkerDrag(p0: Marker) {}
+
+    override fun onMarkerDragEnd(marker: Marker) {
+        locationLat = marker.position.latitude
+        locationLng = marker.position.longitude
+        locationZoom = map.cameraPosition.zoom
+    }
+
+    override fun onMarkerDragStart(p0: Marker) {}
 }

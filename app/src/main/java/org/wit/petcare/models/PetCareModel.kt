@@ -15,6 +15,9 @@ data class PetCareModel(
     var feedingHour: Int = 1,
     var feedingMinute: Int = 0,
     var timePicker: String = "AM",
-    var imageUri: String = ""
+    var imageUri: String = "",
+    var lat: Double = 0.0,
+    var lng: Double = 0.0,
+    var zoom: Float = 0f
 
 ) : Parcelable

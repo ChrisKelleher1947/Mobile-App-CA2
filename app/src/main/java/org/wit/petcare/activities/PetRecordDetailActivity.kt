@@ -25,6 +25,8 @@ class PetRecordDetailActivity : AppCompatActivity() {
 
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
 
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +34,7 @@ class PetRecordDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         app = application as MainApp
         registerImagePickerCallback()
+        registerMapCallback()
 
         setSupportActionBar(binding.toolbarDetail)
         supportActionBar?.title = "Pet Details"
@@ -60,7 +63,7 @@ class PetRecordDetailActivity : AppCompatActivity() {
                     .load(pet.imageUri)
                     .into(binding.placemarkImage)
             }
-            
+
         }
 
 
@@ -77,6 +80,14 @@ class PetRecordDetailActivity : AppCompatActivity() {
 
         binding.chooseImage.setOnClickListener {
             showImagePicker(this, imageIntentLauncher)
+        }
+
+        binding.chooseLocation.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("lat", petRecord.lat)
+            intent.putExtra("lng", petRecord.lng)
+            intent.putExtra("zoom", petRecord.zoom)
+            mapIntentLauncher.launch(intent)
         }
 
 
@@ -126,6 +137,19 @@ class PetRecordDetailActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK && result.data != null) {
+                    val data = result.data!!
+                    petRecord.lat = data.getDoubleExtra("lat", petRecord.lat)
+                    petRecord.lng = data.getDoubleExtra("lng", petRecord.lng)
+                    petRecord.zoom = data.getFloatExtra("zoom", petRecord.zoom)
+                }
+            }
+    }
+
 }
 
 

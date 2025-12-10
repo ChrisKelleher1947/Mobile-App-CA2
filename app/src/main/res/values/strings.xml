@@ -24,6 +24,8 @@
     <string name="pet_image"> Pet Image </string>
     <string name="button_location">Set Location</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="save_location">Save Location</string>
+
 
 
 </resources>
