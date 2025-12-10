@@ -3,6 +3,7 @@ package org.wit.petcare.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import org.wit.petcare.databinding.CardPetRecordBinding
 import org.wit.petcare.models.PetCareModel
 
@@ -33,6 +34,11 @@ class PetcareAdapter (private var petrecords: List<PetCareModel>,
         fun bind(petrecord: PetCareModel, listener: PetCareListener) {
             binding.petcareTitle.text = petrecord.petName
             binding.description.text = petrecord.petType
+            if (!petrecord.imageUri.isNullOrEmpty()) {
+                Picasso.get()
+                    .load(petrecord.imageUri)
+                    .into(binding.petImage)
+            }
             binding.root.setOnClickListener { listener.onPetRecordClick(petrecord)}
         }
     }
