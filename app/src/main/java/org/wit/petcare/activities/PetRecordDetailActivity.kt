@@ -60,6 +60,7 @@ class PetRecordDetailActivity : AppCompatActivity() {
                     .load(pet.imageUri)
                     .into(binding.placemarkImage)
             }
+            
         }
 
 

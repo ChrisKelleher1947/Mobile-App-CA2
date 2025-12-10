@@ -67,6 +67,10 @@ class PetCareActivity : AppCompatActivity() {
                 Snackbar.make(it, message, Snackbar.LENGTH_LONG).show()
             }
         }
+
+        binding.placemarkLocation.setOnClickListener {
+            i ("Set Location Pressed")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
