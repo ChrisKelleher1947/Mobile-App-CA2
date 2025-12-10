@@ -1,6 +1,7 @@
 package org.wit.petcare.activities
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import org.wit.petcare.activities.MapActivity
 import org.wit.petcare.R
 import org.wit.petcare.adapters.PetcareAdapter
 class PetCareActivity : AppCompatActivity() {
@@ -23,9 +27,13 @@ class PetCareActivity : AppCompatActivity() {
     lateinit var app: MainApp
     private val calendar = Calendar.getInstance()
 
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        registerMapCallback()
 
         binding = ActivityPetcareBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -69,8 +77,11 @@ class PetCareActivity : AppCompatActivity() {
         }
 
         binding.placemarkLocation.setOnClickListener {
-            i ("Set Location Pressed")
+            i("Set Location Pressed")
+            val launcherIntent = Intent(this, MapActivity::class.java)
+            mapIntentLauncher.launch(launcherIntent)
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -103,5 +114,11 @@ class PetCareActivity : AppCompatActivity() {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
+    }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { i("Map Loaded") }
     }
 }
