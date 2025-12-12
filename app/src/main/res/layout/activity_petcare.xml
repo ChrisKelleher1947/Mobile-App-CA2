@@ -107,6 +107,11 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"/>
 
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/minimap"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="8dp"/>
 
                 <Button
                     android:id="@+id/btnAddPet"

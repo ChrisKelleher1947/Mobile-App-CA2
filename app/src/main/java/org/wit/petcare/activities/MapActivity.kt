@@ -14,7 +14,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.petcare.R
 import org.wit.petcare.databinding.ActivityMapBinding
-import org.wit.petcare.models.PetCareModel
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener {
 
