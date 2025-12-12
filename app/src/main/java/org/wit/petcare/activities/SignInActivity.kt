@@ -114,7 +114,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun goToHome() {
-        startActivity(Intent(this, PetRecordListActivity::class.java))
+        startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }
 }
