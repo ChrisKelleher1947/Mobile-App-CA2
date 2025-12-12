@@ -12,7 +12,20 @@
           "package_name": "org.wit.petcare"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "26102870354-5bfk34cbo7ib3ua0tid35br95rdu21o7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.wit.petcare",
+            "certificate_hash": "bf6d8c2d595d8c5408e254b9330f23c918237bc9"
+          }
+        },
+        {
+          "client_id": "26102870354-8vlrfnaojukdhh10aht1t0klhbss156j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBZ2vhEZct5-6jpPnFUkNghb2R-tfUdye8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "26102870354-8vlrfnaojukdhh10aht1t0klhbss156j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
