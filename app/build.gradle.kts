@@ -58,6 +58,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.play.services.maps)
-    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
     implementation("com.google.firebase:firebase-analytics")
 }

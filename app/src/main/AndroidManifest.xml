@@ -14,34 +14,31 @@
         android:theme="@style/Theme.CA1ChrisKelleherMobileAppDev"
         tools:targetApi="34">
 
+        <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/MAPS_API_KEY" />
 
-
+        <!-- Launcher Activity -->
         <activity
-            android:name=".activities.MapActivity"
-            android:exported="false"
-            android:label="@string/title_activity_map" />
-        <activity
-            android:name=".activities.PetRecordListActivity"
+            android:name=".activities.SignInActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
 
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+        <!-- Other activities -->
+        <activity
+            android:name=".activities.MapActivity"
+            android:label="@string/title_activity_map"
+            android:exported="false" />
+
+        <activity android:name=".activities.PetCareActivity" />
         <activity android:name=".activities.PetRecordDetailActivity" />
-        <activity android:name=".activities.PetCareActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+        <activity android:name=".activities.PetRecordListActivity" />
+
     </application>
 
 </manifest>
