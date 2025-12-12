@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "26102870354",
+    "project_id": "mobileapp-ca2-5823d",
+    "storage_bucket": "mobileapp-ca2-5823d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26102870354:android:63b096e05aba022acb0a8b",
+        "android_client_info": {
+          "package_name": "org.wit.petcare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "26102870354-5bfk34cbo7ib3ua0tid35br95rdu21o7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.wit.petcare",
+            "certificate_hash": "bf6d8c2d595d8c5408e254b9330f23c918237bc9"
+          }
+        },
+        {
+          "client_id": "26102870354-8vlrfnaojukdhh10aht1t0klhbss156j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ2vhEZct5-6jpPnFUkNghb2R-tfUdye8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "26102870354-8vlrfnaojukdhh10aht1t0klhbss156j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
