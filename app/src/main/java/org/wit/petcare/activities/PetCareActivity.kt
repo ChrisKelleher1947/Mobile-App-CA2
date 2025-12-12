@@ -1,6 +1,7 @@
 package org.wit.petcare.activities
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +14,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.petcare.R
-import org.wit.petcare.adapters.PetcareAdapter
+
 class PetCareActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPetcareBinding
@@ -23,64 +31,87 @@ class PetCareActivity : AppCompatActivity() {
     lateinit var app: MainApp
     private val calendar = Calendar.getInstance()
 
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+
+    private lateinit var miniMap: MapView
+    private lateinit var miniGoogleMap: GoogleMap
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        registerMapCallback()
 
         binding = ActivityPetcareBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbarAdd)
 
-        app = application as MainApp
-
-        i("PetCare Activity started..")
-
-        //Date picker button
-        binding.btnDatePicker.setOnClickListener {
-            showDatePicker()
+        miniMap = binding.minimap
+        miniMap.onCreate(savedInstanceState)
+        miniMap.getMapAsync { googleMap ->
+            miniGoogleMap = googleMap
+            updateMiniMap()
         }
 
-        //Save button
+        setSupportActionBar(binding.toolbarAdd)
+        app = application as MainApp
+
+        binding.btnDatePicker.setOnClickListener { showDatePicker() }
+
         binding.btnAddPet.setOnClickListener {
             val name = binding.petName.text.toString().trim()
             val type = binding.petType.text.toString().trim()
             val birthday = binding.tvSelectedDate.text.toString().replace("Selected Date: ", "").trim()
 
-            // Check all fields
-            if (name.isNotEmpty() && type.isNotEmpty() && birthday.isNotEmpty() && birthday != "No date selected") {
+            val missingFields = mutableListOf<String>()
+
+            if (name.isEmpty()) missingFields.add("name")
+            if (type.isEmpty()) missingFields.add("type")
+            if (birthday.isEmpty() || birthday == "No date selected") missingFields.add("birthday")
+            if (petRecord.lat == 0.0 && petRecord.lng == 0.0) missingFields.add("location")
+
+            if (missingFields.isEmpty()) {
                 petRecord.petName = name
                 petRecord.petType = type
                 petRecord.petBirthday = birthday
                 app.petRecords.create(petRecord)
 
-                i("Add Button Pressed: $petRecord")
                 Snackbar.make(it, "Pet saved successfully!", Snackbar.LENGTH_SHORT).show()
                 setResult(RESULT_OK)
                 finish()
             } else {
-                val missingFields = mutableListOf<String>()
-                if (name.isEmpty()) missingFields.add("name")
-                if (type.isEmpty()) missingFields.add("type")
-                if (birthday.isEmpty() || birthday == "No date selected") missingFields.add("birthday")
-
-                val message = "Please enter: ${missingFields.joinToString(", ")}"
-                Snackbar.make(it, message, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(it, "Please enter: ${missingFields.joinToString(", ")}", Snackbar.LENGTH_LONG).show()
             }
+        }
+
+        binding.chooseLocation.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("lat", petRecord.lat)
+            intent.putExtra("lng", petRecord.lng)
+            intent.putExtra("zoom", petRecord.zoom)
+            mapIntentLauncher.launch(intent)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_petcare, menu)
-        return super.onCreateOptionsMenu(menu)
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK && result.data != null) {
+                    val data = result.data!!
+                    petRecord.lat = data.getDoubleExtra("lat", petRecord.lat)
+                    petRecord.lng = data.getDoubleExtra("lng", petRecord.lng)
+                    petRecord.zoom = data.getFloatExtra("zoom", petRecord.zoom)
+
+                    updateMiniMap()
+                }
+            }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.item_cancel -> {
-                finish()
-            }
+    private fun updateMiniMap() {
+        if (::miniGoogleMap.isInitialized) {
+            miniGoogleMap.clear()
+            val loc = LatLng(petRecord.lat, petRecord.lng)
+            miniGoogleMap.addMarker(MarkerOptions().position(loc).title("Pet Home"))
+            miniGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, petRecord.zoom))
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun showDatePicker() {
@@ -92,12 +123,30 @@ class PetCareActivity : AppCompatActivity() {
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
                 binding.tvSelectedDate.text = getString(R.string.label_selected_date_prefix, formattedDate)
-
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_petcare, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.item_cancel) finish()
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() { super.onResume(); miniMap.onResume() }
+    override fun onPause() { super.onPause(); miniMap.onPause() }
+    override fun onDestroy() { super.onDestroy(); miniMap.onDestroy() }
+    override fun onLowMemory() { super.onLowMemory(); miniMap.onLowMemory() }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        miniMap.onSaveInstanceState(outState)
     }
 }

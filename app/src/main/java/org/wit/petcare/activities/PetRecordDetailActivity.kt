@@ -15,23 +15,41 @@ import org.wit.petcare.databinding.ActivityPetRecordDetailBinding
 import org.wit.petcare.helpers.showImagePicker
 import org.wit.petcare.main.MainApp
 import org.wit.petcare.models.PetCareModel
-import timber.log.Timber.i
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+
 
 class PetRecordDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPetRecordDetailBinding
     private lateinit var app: MainApp
     private lateinit var petRecord: PetCareModel
-
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+
+    private lateinit var miniMap: MapView
+
+    private lateinit var miniGoogleMap: GoogleMap
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPetRecordDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        miniMap = binding.minimap
+        miniMap.onCreate(savedInstanceState)
+        miniMap.getMapAsync { googleMap ->
+            miniGoogleMap = googleMap
+            updateMiniMap()
+        }
+
         app = application as MainApp
         registerImagePickerCallback()
+        registerMapCallback()
 
         setSupportActionBar(binding.toolbarDetail)
         supportActionBar?.title = "Pet Details"
@@ -60,6 +78,7 @@ class PetRecordDetailActivity : AppCompatActivity() {
                     .load(pet.imageUri)
                     .into(binding.placemarkImage)
             }
+
         }
 
 
@@ -76,6 +95,14 @@ class PetRecordDetailActivity : AppCompatActivity() {
 
         binding.chooseImage.setOnClickListener {
             showImagePicker(this, imageIntentLauncher)
+        }
+
+        binding.chooseLocation.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("lat", petRecord.lat)
+            intent.putExtra("lng", petRecord.lng)
+            intent.putExtra("zoom", petRecord.zoom)
+            mapIntentLauncher.launch(intent)
         }
 
 
@@ -125,6 +152,37 @@ class PetRecordDetailActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK && result.data != null) {
+                    val data = result.data!!
+                    petRecord.lat = data.getDoubleExtra("lat", petRecord.lat)
+                    petRecord.lng = data.getDoubleExtra("lng", petRecord.lng)
+                    petRecord.zoom = data.getFloatExtra("zoom", petRecord.zoom)
+                    updateMiniMap()
+                }
+            }
+    }
+    private fun updateMiniMap() {
+        if (::miniGoogleMap.isInitialized) {
+            miniGoogleMap.clear()
+            val loc = LatLng(petRecord.lat, petRecord.lng)
+            miniGoogleMap.addMarker(MarkerOptions().position(loc).title("Pet Home"))
+            miniGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, petRecord.zoom))
+        }
+    }
+    override fun onResume() { super.onResume(); miniMap.onResume() }
+    override fun onPause() { super.onPause(); miniMap.onPause() }
+    override fun onDestroy() { super.onDestroy(); miniMap.onDestroy() }
+    override fun onLowMemory() { super.onLowMemory(); miniMap.onLowMemory() }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        miniMap.onSaveInstanceState(outState)
+    }
+
+
 }
 
 

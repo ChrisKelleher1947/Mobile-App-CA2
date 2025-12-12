@@ -35,6 +35,9 @@ class PetCareJSONStore(private val context: Context) {
             foundPet.feedingMinute = pet.feedingMinute
             foundPet.timePicker = pet.timePicker
             foundPet.imageUri = pet.imageUri
+            foundPet.lat = pet.lat
+            foundPet.lng = pet.lng
+            foundPet.zoom = pet.zoom
             save()
             Timber.i("Updated pet: ${foundPet.petName}")
         } else {
