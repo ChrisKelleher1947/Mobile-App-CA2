@@ -40,6 +40,9 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="name">Name</string>
+    <string name="petcare">PetCare</string>
+    <string name="manage_your_pets_with_ease">Manage your pets with ease</string>
+    <string name="or">OR</string>
 
 
 </resources>
