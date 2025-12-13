@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import org.wit.petcare.R
@@ -40,6 +41,16 @@ class HomeActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         setupNavHeader()
+        val cardPetList = findViewById<MaterialCardView>(R.id.cardPetList)
+        val cardAddPet = findViewById<MaterialCardView>(R.id.cardAddPet)
+
+        cardPetList.setOnClickListener {
+            startActivity(Intent(this, PetRecordListActivity::class.java))
+        }
+
+        cardAddPet.setOnClickListener {
+            startActivity(Intent(this, PetCareActivity::class.java))
+        }
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
