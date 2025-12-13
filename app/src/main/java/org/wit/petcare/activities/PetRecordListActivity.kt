@@ -5,28 +5,30 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import org.wit.petcare.R
+import org.wit.petcare.adapters.PetCareListener
+import org.wit.petcare.adapters.PetcareAdapter
 import org.wit.petcare.databinding.ActivityPetRecordListBinding
 import org.wit.petcare.main.MainApp
-import org.wit.petcare.adapters.PetcareAdapter
-import org.wit.petcare.adapters.PetCareListener
 import org.wit.petcare.models.PetCareModel
 
+class PetRecordListActivity : AppCompatActivity(), PetCareListener {
 
-class PetRecordListActivity : AppCompatActivity(), PetCareListener  {
-
-    lateinit var app: MainApp
+    private lateinit var app: MainApp
     private lateinit var binding: ActivityPetRecordListBinding
+    private lateinit var toggle: ActionBarDrawerToggle
 
     private val getResult =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                (binding.recyclerView.adapter)?.
-                notifyItemRangeChanged(0,app.petRecords.findAll().size)
+                binding.recyclerView.adapter?.notifyItemRangeChanged(
+                    0,
+                    app.petRecords.findAll().size
+                )
             }
         }
 
@@ -34,13 +36,24 @@ class PetRecordListActivity : AppCompatActivity(), PetCareListener  {
         super.onCreate(savedInstanceState)
         binding = ActivityPetRecordListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = title
+
         setSupportActionBar(binding.toolbar)
+
+        toggle = ActionBarDrawerToggle(
+            this,
+            binding.drawerLayout,
+            binding.toolbar,
+            R.string.open,
+            R.string.close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        setupDrawerNavigation()
 
         app = application as MainApp
 
-        val layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = PetcareAdapter(app.petRecords.findAll(), this)
     }
 
@@ -52,7 +65,8 @@ class PetRecordListActivity : AppCompatActivity(), PetCareListener  {
 
         searchView.queryHint = "Search pets..."
 
-        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let { filterPets(it) }
                 return true
@@ -64,49 +78,59 @@ class PetRecordListActivity : AppCompatActivity(), PetCareListener  {
             }
         })
 
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) return true
+
         when (item.itemId) {
             R.id.item_add -> {
-                val launcherIntent = Intent(this, PetCareActivity::class.java)
-                getResult.launch(launcherIntent)
+                getResult.launch(Intent(this, PetCareActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onPetRecordClick(petrecord: PetCareModel) {
-        val launcherIntent = Intent(this, PetRecordDetailActivity::class.java)
-        launcherIntent.putExtra("pet_record", petrecord)
-        startActivity(launcherIntent)
+        startActivity(
+            Intent(this, PetRecordDetailActivity::class.java)
+                .putExtra("pet_record", petrecord)
+        )
     }
 
-    private val getClickResult =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == RESULT_OK) {
-                (binding.recyclerView.adapter)?.
-                notifyItemRangeChanged(0,app.petRecords.findAll().size)
-            }
-        }
     override fun onResume() {
         super.onResume()
         binding.recyclerView.adapter = PetcareAdapter(app.petRecords.findAll(), this)
     }
+
     private fun filterPets(query: String) {
-        val allPets = app.petRecords.findAll()
-        val filtered = allPets.filter { pet ->
-            pet.petName.contains(query, ignoreCase = true) ||
-                    pet.petType.contains(query, ignoreCase = true)
+        val filtered = app.petRecords.findAll().filter {
+            it.petName.contains(query, true) ||
+                    it.petType.contains(query, true)
         }
         binding.recyclerView.adapter = PetcareAdapter(filtered, this)
     }
 
+    private fun setupDrawerNavigation() {
+        binding.navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home ->
+                    startActivity(Intent(this, HomeActivity::class.java))
 
+                R.id.nav_list -> {}
+
+                R.id.nav_add_pet ->
+                    startActivity(Intent(this, PetCareActivity::class.java))
+
+                R.id.nav_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    startActivity(Intent(this, SignInActivity::class.java))
+                    finish()
+                }
+            }
+            binding.drawerLayout.closeDrawers()
+            true
+        }
+    }
 }
-
-
