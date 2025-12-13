@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +51,7 @@ class PetRecordListActivity : AppCompatActivity(), PetCareListener {
         toggle.syncState()
 
         setupDrawerNavigation()
+        setupNavHeader()
 
         app = application as MainApp
 
@@ -132,5 +134,20 @@ class PetRecordListActivity : AppCompatActivity(), PetCareListener {
             binding.drawerLayout.closeDrawers()
             true
         }
+    }
+    private fun setupNavHeader() {
+        val headerView = binding.navView.getHeaderView(0)
+
+        val nameText = headerView.findViewById<TextView>(R.id.user_name)
+        val emailText = headerView.findViewById<TextView>(R.id.user_email)
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        emailText.text = user?.email ?: ""
+
+        nameText.text =
+            user?.displayName
+                ?: user?.email?.substringBefore("@")
+                        ?: "User"
     }
 }

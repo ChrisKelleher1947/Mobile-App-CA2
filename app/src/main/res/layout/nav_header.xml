@@ -19,15 +19,13 @@
         android:id="@+id/user_name"
         android:paddingTop="8dp"
         android:textSize="20dp"
-        android:text="Chris Kelleher"
         android:textStyle="bold"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/user_email"
-        android:textSize="16dp"
-        android:text="ckelleher1312@gmail.com"/>
+        android:textSize="16dp"/>
 
     <View
         android:layout_width="match_parent"

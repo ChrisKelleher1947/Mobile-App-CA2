@@ -2,6 +2,7 @@ package org.wit.petcare.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +26,8 @@ class HomeActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        setupNavHeader()
+
 
         toggle = ActionBarDrawerToggle(
             this,
@@ -61,4 +64,21 @@ class HomeActivity : AppCompatActivity() {
             true
         }
     }
+
+    private fun setupNavHeader() {
+        val headerView = navView.getHeaderView(0)
+
+        val nameText = headerView.findViewById<TextView>(R.id.user_name)
+        val emailText = headerView.findViewById<TextView>(R.id.user_email)
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        emailText.text = user?.email ?: ""
+
+        nameText.text =
+            user?.displayName
+                ?: user?.email?.substringBefore("@")
+                        ?: "User"
+    }
+
 }
