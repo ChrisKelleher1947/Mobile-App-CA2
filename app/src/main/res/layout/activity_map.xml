@@ -18,7 +18,5 @@
         android:text="@string/save_location"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorAccent"
-        android:textColor="@android:color/white"
         android:padding="8dp"/>
 </FrameLayout>

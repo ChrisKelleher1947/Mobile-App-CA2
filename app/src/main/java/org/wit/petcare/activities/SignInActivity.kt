@@ -15,7 +15,7 @@ import com.google.firebase.auth.userProfileChangeRequest
 import org.wit.petcare.R
 import org.wit.petcare.databinding.ActivitySignInBinding
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySignInBinding
     private lateinit var googleSignInClient: GoogleSignInClient

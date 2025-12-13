@@ -39,6 +39,7 @@
         <activity android:name=".activities.PetRecordDetailActivity" />
         <activity android:name=".activities.PetRecordListActivity" />
         <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.SettingsActivity"/>
 
     </application>
 

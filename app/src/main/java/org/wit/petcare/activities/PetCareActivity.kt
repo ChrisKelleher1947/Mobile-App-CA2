@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.petcare.R
 
-class PetCareActivity : AppCompatActivity() {
+class PetCareActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPetcareBinding
     private var petRecord = PetCareModel()
@@ -51,7 +51,7 @@ class PetCareActivity : AppCompatActivity() {
             updateMiniMap()
         }
 
-        setSupportActionBar(binding.toolbarAdd)
+        setSupportActionBar(binding.toolbar)
         app = application as MainApp
 
         binding.btnDatePicker.setOnClickListener { showDatePicker() }

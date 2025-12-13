@@ -18,7 +18,7 @@ import org.wit.petcare.adapters.PetcareAdapter
 import org.wit.petcare.main.MainApp
 import org.wit.petcare.models.PetCareModel
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var drawerLayout: DrawerLayout
@@ -61,6 +61,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_home -> {}
                 R.id.nav_list -> startActivity(Intent(this, PetRecordListActivity::class.java))
                 R.id.nav_add_pet -> startActivity(Intent(this, PetCareActivity::class.java))
+                R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
                 R.id.nav_logout -> {
                     FirebaseAuth.getInstance().signOut()
                     startActivity(Intent(this, SignInActivity::class.java))

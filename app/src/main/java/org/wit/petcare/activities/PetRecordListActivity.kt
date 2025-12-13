@@ -17,7 +17,7 @@ import org.wit.petcare.databinding.ActivityPetRecordListBinding
 import org.wit.petcare.main.MainApp
 import org.wit.petcare.models.PetCareModel
 
-class PetRecordListActivity : AppCompatActivity(), PetCareListener {
+class PetRecordListActivity : BaseActivity(), PetCareListener {
 
     private lateinit var app: MainApp
     private lateinit var binding: ActivityPetRecordListBinding
@@ -124,6 +124,9 @@ class PetRecordListActivity : AppCompatActivity(), PetCareListener {
 
                 R.id.nav_add_pet ->
                     startActivity(Intent(this, PetCareActivity::class.java))
+
+                R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
+
 
                 R.id.nav_logout -> {
                     FirebaseAuth.getInstance().signOut()

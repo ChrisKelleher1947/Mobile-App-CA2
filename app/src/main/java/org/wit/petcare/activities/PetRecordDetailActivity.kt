@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 
-class PetRecordDetailActivity : AppCompatActivity() {
+class PetRecordDetailActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPetRecordDetailBinding
     private lateinit var app: MainApp
@@ -51,7 +51,7 @@ class PetRecordDetailActivity : AppCompatActivity() {
         registerImagePickerCallback()
         registerMapCallback()
 
-        setSupportActionBar(binding.toolbarDetail)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "Pet Details"
 
         binding.hourPicker.minValue = 1
