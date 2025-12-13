@@ -4,42 +4,62 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import org.wit.petcare.databinding.CardPetHorizontalBinding
 import org.wit.petcare.databinding.CardPetRecordBinding
 import org.wit.petcare.models.PetCareModel
 
 interface PetCareListener {
     fun onPetRecordClick(petrecord: PetCareModel)
 }
-class PetcareAdapter (private var petrecords: List<PetCareModel>,
-                      private val listener: PetCareListener) :
-    RecyclerView.Adapter<PetcareAdapter.MainHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-        val binding = CardPetRecordBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
+class PetcareAdapter(
+    private var petrecords: List<PetCareModel>,
+    private val listener: PetCareListener,
+    private val isHorizontal: Boolean = false
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        return MainHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return if (isHorizontal) {
+            val binding = CardPetHorizontalBinding.inflate(inflater, parent, false)
+            HorizontalHolder(binding)
+        } else {
+            val binding = CardPetRecordBinding.inflate(inflater, parent, false)
+            VerticalHolder(binding)
+        }
     }
 
-    override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val petrecord = petrecords[holder.adapterPosition]
-        holder.bind(petrecord, listener)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val petrecord = petrecords[position]
+        if (holder is HorizontalHolder) holder.bind(petrecord, listener)
+        if (holder is VerticalHolder) holder.bind(petrecord, listener)
     }
 
     override fun getItemCount(): Int = petrecords.size
 
-    class MainHolder(private val binding : CardPetRecordBinding) :
+    class HorizontalHolder(private val binding: CardPetHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(petrecord: PetCareModel, listener: PetCareListener) {
             binding.petcareTitle.text = petrecord.petName
             binding.description.text = petrecord.petType
             if (!petrecord.imageUri.isNullOrEmpty()) {
-                Picasso.get()
-                    .load(petrecord.imageUri)
-                    .into(binding.petImage)
+                Picasso.get().load(petrecord.imageUri).into(binding.petImage)
             }
-            binding.root.setOnClickListener { listener.onPetRecordClick(petrecord)}
+            binding.root.setOnClickListener { listener.onPetRecordClick(petrecord) }
+        }
+    }
+
+    class VerticalHolder(private val binding: CardPetRecordBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(petrecord: PetCareModel, listener: PetCareListener) {
+            binding.petcareTitle.text = petrecord.petName
+            binding.description.text = petrecord.petType
+            if (!petrecord.imageUri.isNullOrEmpty()) {
+                Picasso.get().load(petrecord.imageUri).into(binding.petImage)
+            }
+            binding.root.setOnClickListener { listener.onPetRecordClick(petrecord) }
         }
     }
 }

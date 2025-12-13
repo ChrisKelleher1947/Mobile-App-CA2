@@ -38,6 +38,7 @@
         <activity android:name=".activities.PetCareActivity" />
         <activity android:name=".activities.PetRecordDetailActivity" />
         <activity android:name=".activities.PetRecordListActivity" />
+        <activity android:name=".activities.HomeActivity" />
 
     </application>
 
