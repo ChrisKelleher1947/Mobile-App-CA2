@@ -33,6 +33,7 @@ class SignInActivity : BaseActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_CA1ChrisKelleherMobileAppDev)
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)

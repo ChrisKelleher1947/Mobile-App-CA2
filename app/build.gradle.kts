@@ -62,4 +62,5 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation("com.google.firebase:firebase-analytics")
+    implementation("androidx.core:core-splashscreen:1.2.0")
 }
