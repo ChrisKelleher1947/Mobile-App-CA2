@@ -34,7 +34,7 @@ class PetCareJSONStore(private val context: Context) {
             foundPet.feedingHour = pet.feedingHour
             foundPet.feedingMinute = pet.feedingMinute
             foundPet.timePicker = pet.timePicker
-            foundPet.imageUri = pet.imageUri
+            foundPet.imagePath = pet.imagePath
             foundPet.lat = pet.lat
             foundPet.lng = pet.lng
             foundPet.zoom = pet.zoom

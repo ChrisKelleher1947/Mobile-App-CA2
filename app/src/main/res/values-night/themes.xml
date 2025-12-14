@@ -1,7 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.CA1ChrisKelleherMobileAppDev" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/lavender_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/lavender_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
     </style>
+
+    <style name="Theme.CA1ChrisKelleherMobileAppDev" parent="Base.Theme.CA1ChrisKelleherMobileAppDev" />
+
+    <style name="Theme.PetCare.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/lavender_dark</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/lavender</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/my_logo</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.CA1ChrisKelleherMobileAppDev</item>
+    </style>
+
 </resources>

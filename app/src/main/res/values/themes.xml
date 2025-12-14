@@ -1,9 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.CA1ChrisKelleherMobileAppDev" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/lavender</item>
+        <item name="colorOnPrimary">@color/black_text</item>
+        <item name="colorSecondary">@color/lavender</item>
+        <item name="colorOnSecondary">@color/black_text</item>
     </style>
 
     <style name="Theme.CA1ChrisKelleherMobileAppDev" parent="Base.Theme.CA1ChrisKelleherMobileAppDev" />
+
+    <style name="Theme.PetCare.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/lavender</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/lavender</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/my_logo</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.CA1ChrisKelleherMobileAppDev</item>
+    </style>
+
 </resources>

@@ -15,7 +15,7 @@ import com.google.firebase.auth.userProfileChangeRequest
 import org.wit.petcare.R
 import org.wit.petcare.databinding.ActivitySignInBinding
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySignInBinding
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -33,6 +33,7 @@ class SignInActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_CA1ChrisKelleherMobileAppDev)
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
