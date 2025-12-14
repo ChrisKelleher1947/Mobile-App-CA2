@@ -20,6 +20,8 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import org.wit.petcare.helpers.saveImageToInternalStorage
+import java.io.File
 
 
 class PetRecordDetailActivity : BaseActivity() {
@@ -73,9 +75,9 @@ class PetRecordDetailActivity : BaseActivity() {
             binding.hourPicker.value = pet.feedingHour
             binding.minutePicker.value = pet.feedingMinute
             binding.timePicker.value = if (pet.timePicker == "PM") 1 else 0
-            if (pet.imageUri.isNotEmpty()) {
+            if (pet.imagePath.isNotEmpty()) {
                 Picasso.get()
-                    .load(pet.imageUri)
+                    .load(File(pet.imagePath))
                     .into(binding.placemarkImage)
             }
 
@@ -118,9 +120,12 @@ class PetRecordDetailActivity : BaseActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK && result.data != null) {
                     val uri = result.data!!.data!!
-                    petRecord.imageUri = uri.toString()
+                    val imagePath = saveImageToInternalStorage(this, uri)
+
+                    petRecord.imagePath = imagePath
+
                     Picasso.get()
-                        .load(uri)
+                        .load(File(imagePath))
                         .into(binding.placemarkImage)
                 }
             }

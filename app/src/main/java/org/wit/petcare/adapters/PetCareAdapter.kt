@@ -7,6 +7,7 @@ import com.squareup.picasso.Picasso
 import org.wit.petcare.databinding.CardPetHorizontalBinding
 import org.wit.petcare.databinding.CardPetRecordBinding
 import org.wit.petcare.models.PetCareModel
+import java.io.File
 
 interface PetCareListener {
     fun onPetRecordClick(petrecord: PetCareModel)
@@ -43,8 +44,10 @@ class PetcareAdapter(
         fun bind(petrecord: PetCareModel, listener: PetCareListener) {
             binding.petcareTitle.text = petrecord.petName
             binding.description.text = petrecord.petType
-            if (!petrecord.imageUri.isNullOrEmpty()) {
-                Picasso.get().load(petrecord.imageUri).into(binding.petImage)
+            if (petrecord.imagePath.isNotEmpty()) {
+                Picasso.get()
+                    .load(File(petrecord.imagePath))
+                    .into(binding.petImage)
             }
             binding.root.setOnClickListener { listener.onPetRecordClick(petrecord) }
         }
@@ -56,8 +59,10 @@ class PetcareAdapter(
         fun bind(petrecord: PetCareModel, listener: PetCareListener) {
             binding.petcareTitle.text = petrecord.petName
             binding.description.text = petrecord.petType
-            if (!petrecord.imageUri.isNullOrEmpty()) {
-                Picasso.get().load(petrecord.imageUri).into(binding.petImage)
+            if (petrecord.imagePath.isNotEmpty()) {
+                Picasso.get()
+                    .load(File(petrecord.imagePath))
+                    .into(binding.petImage)
             }
             binding.root.setOnClickListener { listener.onPetRecordClick(petrecord) }
         }
