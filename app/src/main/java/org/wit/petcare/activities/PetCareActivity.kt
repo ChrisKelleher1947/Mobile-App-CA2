@@ -72,11 +72,11 @@ class PetCareActivity : BaseActivity() {
                 petRecord.petName = name
                 petRecord.petType = type
                 petRecord.petBirthday = birthday
-                app.petRecords.create(petRecord)
-
-                Snackbar.make(it, "Pet saved successfully!", Snackbar.LENGTH_SHORT).show()
-                setResult(RESULT_OK)
-                finish()
+                app.petRecords.create(petRecord) {
+                    Snackbar.make(it, "Pet saved successfully!", Snackbar.LENGTH_SHORT).show()
+                    setResult(RESULT_OK)
+                    finish()
+                }
             } else {
                 Snackbar.make(it, "Please enter: ${missingFields.joinToString(", ")}", Snackbar.LENGTH_LONG).show()
             }
