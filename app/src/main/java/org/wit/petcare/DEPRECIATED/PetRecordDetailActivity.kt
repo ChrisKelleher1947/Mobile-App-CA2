@@ -1,4 +1,4 @@
-package org.wit.petcare.views.petdetails
+package org.wit.petcare.DEPRECIATED
 //
 //import android.content.Intent
 //import android.os.Bundle

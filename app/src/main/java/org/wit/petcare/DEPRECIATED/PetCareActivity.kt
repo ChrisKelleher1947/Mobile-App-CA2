@@ -1,4 +1,4 @@
-package org.wit.petcare.views.addPet
+package org.wit.petcare.DEPRECIATED
 //
 //import android.app.DatePickerDialog
 //import android.content.Intent

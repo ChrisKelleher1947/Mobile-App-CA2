@@ -7,7 +7,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Serializable
 data class Location(
-    var lat: Double,
-    var lng: Double,
-    var zoom: Float
+    var lat: Double = 0.0,
+    var lng: Double = 0.0,
+    var zoom: Float = 0f
 ) : Parcelable
+
+

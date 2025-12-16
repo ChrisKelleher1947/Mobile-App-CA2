@@ -23,9 +23,9 @@ import java.io.File
 class PetDetailsView : BaseActivity() {
 
     private lateinit var binding: ActivityPetRecordDetailBinding
-    private lateinit var presenter: PetDetailsPresenter
+    lateinit var presenter: PetDetailsPresenter
 
-    private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
+    lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
 
     private lateinit var miniMap: MapView
@@ -33,6 +33,7 @@ class PetDetailsView : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityPetRecordDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -43,15 +44,13 @@ class PetDetailsView : BaseActivity() {
 
         miniMap = binding.minimap
         miniMap.onCreate(savedInstanceState)
-        miniMap.getMapAsync {
-            miniGoogleMap = it
-            presenter.doConfigureMiniMap()
+        miniMap.getMapAsync { googleMap ->
+            miniGoogleMap = googleMap
+            presenter.loadPet()
         }
 
         registerImagePickerCallback()
         registerMapCallback()
-
-        presenter.loadPet()
 
         binding.btnSaveDetails.setOnClickListener {
             presenter.doSave(
@@ -71,23 +70,17 @@ class PetDetailsView : BaseActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_pet_detail, menu)
-        return true
-    }
+    fun initializePickers() {
+        binding.hourPicker.minValue = 1
+        binding.hourPicker.maxValue = 12
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        when (item.itemId) {
-            R.id.item_cancel -> {
-                presenter.doCancel()
-                true
-            }
-            R.id.item_delete -> {
-                confirmDelete()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+        binding.minutePicker.minValue = 0
+        binding.minutePicker.maxValue = 59
+
+        binding.timePicker.minValue = 0
+        binding.timePicker.maxValue = 1
+        binding.timePicker.displayedValues = arrayOf("AM", "PM")
+    }
 
     fun showPet(pet: PetCareModel) {
         binding.petNameDetail.text = pet.petName
@@ -104,6 +97,7 @@ class PetDetailsView : BaseActivity() {
     }
 
     fun updateMiniMap(lat: Double, lng: Double, zoom: Float) {
+        if (!::miniGoogleMap.isInitialized) return
         miniGoogleMap.clear()
         val loc = LatLng(lat, lng)
         miniGoogleMap.addMarker(MarkerOptions().position(loc).title("Pet Home"))
@@ -119,14 +113,11 @@ class PetDetailsView : BaseActivity() {
         finish()
     }
 
-
     private fun confirmDelete() {
         AlertDialog.Builder(this)
             .setTitle("Delete Pet")
             .setMessage("Are you sure?")
-            .setPositiveButton("Delete") { _, _ ->
-                presenter.doDelete()
-            }
+            .setPositiveButton("Delete") { _, _ -> presenter.doDelete() }
             .setNegativeButton("Cancel", null)
             .show()
     }
@@ -145,8 +136,28 @@ class PetDetailsView : BaseActivity() {
             }
     }
 
+    fun launchMapIntent(intent: Intent) {
+        mapIntentLauncher.launch(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_pet_detail, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
+            R.id.item_cancel -> { presenter.doCancel(); true }
+            R.id.item_delete -> { confirmDelete(); true }
+            else -> super.onOptionsItemSelected(item)
+        }
+
     override fun onResume() { super.onResume(); miniMap.onResume() }
     override fun onPause() { super.onPause(); miniMap.onPause() }
     override fun onDestroy() { super.onDestroy(); miniMap.onDestroy() }
     override fun onLowMemory() { super.onLowMemory(); miniMap.onLowMemory() }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        miniMap.onSaveInstanceState(outState)
+    }
 }
