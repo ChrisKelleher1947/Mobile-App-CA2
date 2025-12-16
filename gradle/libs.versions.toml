@@ -32,6 +32,8 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 timber = { module = "com.github.ajalt:timberkt", version.ref = "timber" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+
 
 
 [plugins]

@@ -89,10 +89,12 @@ class PetRecordDetailActivity : BaseActivity() {
             petRecord.feedingHour = binding.hourPicker.value
             petRecord.feedingMinute = binding.minutePicker.value
             petRecord.timePicker = if (binding.timePicker.value == 0) "AM" else "PM"
-            app.petRecords.update(petRecord)
-            Snackbar.make(it, "Saved successfully!", Snackbar.LENGTH_SHORT).show()
-            setResult(RESULT_OK)
-            finish()
+
+            app.petRecords.update(petRecord) {
+                Snackbar.make(it, "Saved successfully!", Snackbar.LENGTH_SHORT).show()
+                setResult(RESULT_OK)
+                finish()
+            }
         }
 
         binding.chooseImage.setOnClickListener {
@@ -144,18 +146,18 @@ class PetRecordDetailActivity : BaseActivity() {
                     .setTitle("Delete Pet")
                     .setMessage("Are you sure you want to delete ${petRecord.petName}?")
                     .setPositiveButton("Delete") { _, _ ->
-                        app.petRecords.delete(petRecord)
-                        Snackbar.make(binding.root, "Pet deleted", Snackbar.LENGTH_SHORT).show()
-                        setResult(RESULT_OK)
-                        finish()
+                        app.petRecords.delete(petRecord.id) {
+                            Snackbar.make(binding.root, "Pet deleted", Snackbar.LENGTH_SHORT).show()
+                            setResult(RESULT_OK)
+                            finish()
+                        }
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
-                true
             }
 
             else -> super.onOptionsItemSelected(item)
-        }
+        } as Boolean
     }
 
     private fun registerMapCallback() {

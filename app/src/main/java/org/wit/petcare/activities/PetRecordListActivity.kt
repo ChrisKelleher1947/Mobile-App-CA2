@@ -26,10 +26,7 @@ class PetRecordListActivity : BaseActivity(), PetCareListener {
     private val getResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                binding.recyclerView.adapter?.notifyItemRangeChanged(
-                    0,
-                    app.petRecords.findAll().size
-                )
+                refreshList()
             }
         }
 
@@ -56,19 +53,29 @@ class PetRecordListActivity : BaseActivity(), PetCareListener {
         app = application as MainApp
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = PetcareAdapter(app.petRecords.findAll(), this)
+
+        // Load Firestore data
+        refreshList()
+    }
+
+    private fun refreshList() {
+        app.petRecords.findAll { pets ->
+            binding.recyclerView.adapter = PetcareAdapter(pets, this)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as androidx.appcompat.widget.SearchView
-
         searchView.queryHint = "Search pets..."
 
-        searchView.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let { filterPets(it) }
                 return true
@@ -83,14 +90,22 @@ class PetRecordListActivity : BaseActivity(), PetCareListener {
         return true
     }
 
+    private fun filterPets(query: String) {
+        app.petRecords.findAll { pets ->
+            val filtered = pets.filter {
+                it.petName.contains(query, true) || it.petType.contains(query, true)
+            }
+            binding.recyclerView.adapter = PetcareAdapter(filtered, this)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) return true
 
         when (item.itemId) {
-            R.id.item_add -> {
-                getResult.launch(Intent(this, PetCareActivity::class.java))
-            }
+            R.id.item_add -> getResult.launch(Intent(this, PetCareActivity::class.java))
         }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -101,33 +116,13 @@ class PetRecordListActivity : BaseActivity(), PetCareListener {
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.recyclerView.adapter = PetcareAdapter(app.petRecords.findAll(), this)
-    }
-
-    private fun filterPets(query: String) {
-        val filtered = app.petRecords.findAll().filter {
-            it.petName.contains(query, true) ||
-                    it.petType.contains(query, true)
-        }
-        binding.recyclerView.adapter = PetcareAdapter(filtered, this)
-    }
-
     private fun setupDrawerNavigation() {
         binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home ->
-                    startActivity(Intent(this, HomeActivity::class.java))
-
-                R.id.nav_list -> {}
-
-                R.id.nav_add_pet ->
-                    startActivity(Intent(this, PetCareActivity::class.java))
-
+                R.id.nav_home -> startActivity(Intent(this, HomeActivity::class.java))
+                R.id.nav_list -> {} // Already here
+                R.id.nav_add_pet -> startActivity(Intent(this, PetCareActivity::class.java))
                 R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
-
-
                 R.id.nav_logout -> {
                     FirebaseAuth.getInstance().signOut()
                     startActivity(Intent(this, SignInActivity::class.java))
@@ -138,19 +133,15 @@ class PetRecordListActivity : BaseActivity(), PetCareListener {
             true
         }
     }
+
     private fun setupNavHeader() {
         val headerView = binding.navView.getHeaderView(0)
-
         val nameText = headerView.findViewById<TextView>(R.id.user_name)
         val emailText = headerView.findViewById<TextView>(R.id.user_email)
-
         val user = FirebaseAuth.getInstance().currentUser
 
         emailText.text = user?.email ?: ""
-
-        nameText.text =
-            user?.displayName
-                ?: user?.email?.substringBefore("@")
-                        ?: "User"
+        nameText.text = user?.displayName ?: user?.email?.substringBefore("@") ?: "User"
     }
 }
+

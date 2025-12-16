@@ -94,24 +94,28 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun setupQuickStats() {
-        val petCount = app.petRecords.findAll().size
-        quickStats.text = "You have $petCount pets"
+        app.petRecords.findAll { pets ->
+            val petCount = pets.size
+            quickStats.text = "You have $petCount pets"
+        }
     }
 
     private fun setupRecentPets() {
-        val recentPets = app.petRecords.findAll()
-        recentPetsRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recentPetsRecycler.adapter = PetcareAdapter(
-            recentPets.takeLast(5),
-            object : PetCareListener {
-                override fun onPetRecordClick(petrecord: PetCareModel) {
-                    val intent = Intent(this@HomeActivity, PetRecordDetailActivity::class.java)
-                    intent.putExtra("pet_record", petrecord)
-                    startActivity(intent)
-                }
-            },
-            true
-        )
+        app.petRecords.findAll { recentPets ->
+            recentPetsRecycler.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            recentPetsRecycler.adapter = PetcareAdapter(
+                recentPets.takeLast(5),
+                object : PetCareListener {
+                    override fun onPetRecordClick(petrecord: PetCareModel) {
+                        val intent = Intent(this@HomeActivity, PetRecordDetailActivity::class.java)
+                        intent.putExtra("pet_record", petrecord)
+                        startActivity(intent)
+                    }
+                },
+                true
+            )
+        }
     }
 
     override fun onResume() {
