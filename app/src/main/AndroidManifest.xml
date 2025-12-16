@@ -32,14 +32,14 @@
 
         <!-- Other activities -->
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".views.map.MapActivity"
             android:label="@string/title_activity_map"
             android:exported="false" />
 
-        <activity android:name=".activities.PetCareActivity" />
-        <activity android:name=".activities.PetRecordDetailActivity" />
+        <activity android:name=".views.addPet.PetCareActivity" />
+        <activity android:name=".views.petdetails.PetRecordDetailActivity" />
         <activity android:name=".activities.PetRecordListActivity" />
-        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".views.home.HomeActivity" />
         <activity android:name=".activities.SettingsActivity"/>
 
     </application>

@@ -1,10 +1,9 @@
-package org.wit.petcare.activities
+package org.wit.petcare.views.home
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +12,10 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import org.wit.petcare.R
+import org.wit.petcare.activities.BaseActivity
+import org.wit.petcare.activities.PetRecordListActivity
+import org.wit.petcare.activities.SettingsActivity
+import org.wit.petcare.activities.SignInActivity
 import org.wit.petcare.adapters.PetCareListener
 import org.wit.petcare.adapters.PetcareAdapter
 import org.wit.petcare.main.MainApp

@@ -14,6 +14,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.userProfileChangeRequest
 import org.wit.petcare.R
 import org.wit.petcare.databinding.ActivitySignInBinding
+import org.wit.petcare.views.home.HomeActivity
 
 class SignInActivity : BaseActivity() {
 

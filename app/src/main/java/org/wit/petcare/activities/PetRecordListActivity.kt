@@ -16,6 +16,9 @@ import org.wit.petcare.adapters.PetcareAdapter
 import org.wit.petcare.databinding.ActivityPetRecordListBinding
 import org.wit.petcare.main.MainApp
 import org.wit.petcare.models.PetCareModel
+import org.wit.petcare.views.addPet.PetCareActivity
+import org.wit.petcare.views.home.HomeActivity
+import org.wit.petcare.views.petdetails.PetRecordDetailActivity
 
 class PetRecordListActivity : BaseActivity(), PetCareListener {
 
