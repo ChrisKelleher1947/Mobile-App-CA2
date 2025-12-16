@@ -21,7 +21,7 @@
 
         <!-- Launcher Activity -->
         <activity
-            android:name=".activities.SignInActivity"
+            android:name=".views.auth.SignInView"
             android:exported="true"
             android:theme="@style/Theme.PetCare.Splash">
             <intent-filter>
@@ -32,15 +32,15 @@
 
         <!-- Other activities -->
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".views.map.MapView"
             android:label="@string/title_activity_map"
             android:exported="false" />
 
-        <activity android:name=".activities.PetCareActivity" />
-        <activity android:name=".activities.PetRecordDetailActivity" />
-        <activity android:name=".activities.PetRecordListActivity" />
-        <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.SettingsActivity"/>
+        <activity android:name=".views.addPet.PetCareView" />
+        <activity android:name=".views.petdetails.PetDetailsView" />
+        <activity android:name=".views.petlist.PetRecordListView" />
+        <activity android:name=".views.home.HomeView" />
+        <activity android:name=".views.settings.SettingsView"/>
 
     </application>
 

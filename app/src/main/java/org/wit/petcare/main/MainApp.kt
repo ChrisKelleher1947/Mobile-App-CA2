@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import org.wit.petcare.main.repository.PetCareFirestore
 import org.wit.petcare.main.repository.PetCareStore
-import org.wit.petcare.models.PetCareJSONStore
 import timber.log.Timber
 import timber.log.Timber.i
 
