@@ -13,7 +13,7 @@ package org.wit.petcare.DEPRECIATED
 //import com.google.firebase.auth.UserProfileChangeRequest
 //import com.google.firebase.auth.userProfileChangeRequest
 //import org.wit.petcare.R
-//import org.wit.petcare.activities.BaseActivity
+//import org.wit.petcare.helpers.BaseActivity
 //import org.wit.petcare.databinding.ActivitySignInBinding
 //import org.wit.petcare.views.home.HomeView
 //

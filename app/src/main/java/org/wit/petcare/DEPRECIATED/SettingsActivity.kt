@@ -10,7 +10,7 @@ package org.wit.petcare.DEPRECIATED
 //import com.google.android.material.navigation.NavigationView
 //import com.google.firebase.auth.FirebaseAuth
 //import org.wit.petcare.R
-//import org.wit.petcare.activities.BaseActivity
+//import org.wit.petcare.helpers.BaseActivity
 //import org.wit.petcare.views.auth.SignInActivity
 //import org.wit.petcare.views.addPet.PetCareView
 //import org.wit.petcare.views.home.HomeView

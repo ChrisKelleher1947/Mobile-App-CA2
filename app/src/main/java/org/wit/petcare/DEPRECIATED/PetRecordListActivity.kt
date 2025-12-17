@@ -11,7 +11,7 @@ package org.wit.petcare.DEPRECIATED
 //import androidx.recyclerview.widget.LinearLayoutManager
 //import com.google.firebase.auth.FirebaseAuth
 //import org.wit.petcare.R
-//import org.wit.petcare.activities.BaseActivity
+//import org.wit.petcare.helpers.BaseActivity
 //import org.wit.petcare.views.settings.SettingsActivity
 //import org.wit.petcare.views.auth.SignInActivity
 //import org.wit.petcare.adapters.PetCareListener

@@ -12,7 +12,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import org.wit.petcare.R
-import org.wit.petcare.activities.BaseActivity
+import org.wit.petcare.helpers.BaseActivity
 import org.wit.petcare.adapters.PetCareListener
 import org.wit.petcare.adapters.PetcareAdapter
 import org.wit.petcare.models.PetCareModel

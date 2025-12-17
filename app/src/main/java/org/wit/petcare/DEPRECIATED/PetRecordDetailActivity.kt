@@ -15,7 +15,7 @@ package org.wit.petcare.DEPRECIATED
 //import com.google.android.material.snackbar.Snackbar
 //import com.squareup.picasso.Picasso
 //import org.wit.petcare.R
-//import org.wit.petcare.activities.BaseActivity
+//import org.wit.petcare.helpers.BaseActivity
 //import org.wit.petcare.databinding.ActivityPetRecordDetailBinding
 //import org.wit.petcare.helpers.saveImageToInternalStorage
 //import org.wit.petcare.helpers.showImagePicker

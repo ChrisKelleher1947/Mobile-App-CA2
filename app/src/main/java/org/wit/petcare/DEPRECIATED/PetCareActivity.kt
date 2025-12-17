@@ -15,7 +15,7 @@ package org.wit.petcare.DEPRECIATED
 //import com.google.android.gms.maps.model.MarkerOptions
 //import com.google.android.material.snackbar.Snackbar
 //import org.wit.petcare.R
-//import org.wit.petcare.activities.BaseActivity
+//import org.wit.petcare.helpers.BaseActivity
 //import org.wit.petcare.databinding.ActivityPetcareBinding
 //import org.wit.petcare.main.MainApp
 //import org.wit.petcare.models.PetCareModel

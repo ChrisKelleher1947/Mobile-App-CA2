@@ -1,4 +1,4 @@
-package org.wit.petcare.activities
+package org.wit.petcare.helpers
 
 import android.content.SharedPreferences
 import android.os.Bundle

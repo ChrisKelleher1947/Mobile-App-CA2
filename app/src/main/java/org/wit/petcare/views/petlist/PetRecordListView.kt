@@ -7,7 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.wit.petcare.R
-import org.wit.petcare.activities.BaseActivity
+import org.wit.petcare.helpers.BaseActivity
 import org.wit.petcare.adapters.PetCareListener
 import org.wit.petcare.adapters.PetcareAdapter
 import org.wit.petcare.databinding.ActivityPetRecordListBinding
